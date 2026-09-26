@@ -13,7 +13,7 @@ const PIECE_TYPE = {
 
 // HSV
 const PIECE_COLORS = [
-    [185, 100, 98]
+    [185, 100, 90]
 ]
 
 // Each piece has four elements for the four rotations
