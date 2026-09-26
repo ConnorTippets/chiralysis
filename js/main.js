@@ -7,6 +7,8 @@ function setup() {
 function draw() {
     background(50);
 
+    if (keys.includes("ArrowLeft")) board.move_left();
+    if (keys.includes("ArrowRight")) board.move_right();
     board.update();
 }
 

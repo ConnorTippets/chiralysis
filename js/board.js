@@ -58,4 +58,14 @@ class Board {
             this.dropping_piece.rotation -= 4;
         }
     }
+
+    move_left() {
+        if (this.dropping_piece.x <= 0) return;
+        this.dropping_piece.x -= 1;
+    }
+
+    move_right() {
+        if (this.dropping_piece.x >= BOARD_GRID_W) return;
+        this.dropping_piece.x += 1;
+    }
 }
