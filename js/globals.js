@@ -13,3 +13,5 @@ var board;
 function gravity_timer(level) {
     return Math.floor(Math.pow(0.8 - (level - 1) * 0.007, level - 1) * 60);
 }
+
+var keys = [];

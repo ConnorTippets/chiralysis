@@ -44,4 +44,18 @@ class Board {
         }
         this.drop_timer += 1;
     }
+
+    rotate_left() {
+        this.dropping_piece.rotation -= 1;
+        if (this.dropping_piece.rotation < 0) {
+            this.dropping_piece.rotation += 4;
+        }
+    }
+
+    rotate_right() {
+        this.dropping_piece.rotation += 1;
+        if (this.dropping_piece.rotation >= 4) {
+            this.dropping_piece.rotation -= 4;
+        }
+    }
 }

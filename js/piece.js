@@ -62,11 +62,4 @@ class Piece {
         const rot = PIECES[this.type].cells[this.rotation];
         return rot.map((pos) => [this.x + pos[0], this.y + pos[1]]);
     }
-
-    rotate_right() {
-        this.rotation += 1;
-        if (this.rotation >= 4) {
-            this.rotation -= 4;
-        }
-    }
 }
