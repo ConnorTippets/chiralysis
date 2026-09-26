@@ -4,13 +4,15 @@ class Board {
         this.y = y;
 
         this.locked_cells = Array.from({ length: BOARD_GRID_H }, () => Array(BOARD_GRID_W).fill({filled: false, col: null}));
-        this.pieces = [new Piece(PIECE_TYPE.LINE, 3, 0, 0)];
+        this.dropping_piece = new Piece(PIECE_TYPE.LINE, 3, 0, 0);
 
-        for (var piece of this.pieces) {
-            const offset = piece.offset();
-            piece.x -= offset[0];
-            piece.y -= offset[1];
-        }
+        const offset = this.dropping_piece.offset();
+        this.dropping_piece.x -= offset[0];
+        this.dropping_piece.y -= offset[1];
+
+        this.drop_timer = 0;
+
+        this.level = 1;
     }
 
     draw() {
@@ -27,15 +29,19 @@ class Board {
         }
 
         strokeWeight(3);
-        for (var piece of this.pieces) {
-            const col = piece.col();
-            const cells = piece.cells();
-            
-            fill(col[0], col[1], col[2]);
-            stroke(col[0], col[1], col[2] - 35);
-            for (var cell of cells) {
-                rect(cell[0] * BOARD_TILE_W, cell[1] * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H);
-            }
+        const piece_col = this.dropping_piece.col();
+        const piece_cells = this.dropping_piece.cells();
+        
+        fill(piece_col[0], piece_col[1], piece_col[2]);
+        stroke(piece_col[0], piece_col[1], piece_col[2] - 35);
+        for (var cell of piece_cells) {
+            rect(cell[0] * BOARD_TILE_W, cell[1] * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H);
         }
+
+        if (this.drop_timer >= gravity_timer(this.level)) {
+            this.drop_timer = -1;
+            this.dropping_piece.y += 1;
+        }
+        this.drop_timer += 1;
     }
 }
