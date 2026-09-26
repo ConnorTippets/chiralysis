@@ -7,5 +7,9 @@ function setup() {
 function draw() {
     background(50);
 
-    board.draw();
+    board.update();
+}
+
+function keyPressed() {
+    board.dropping_piece.rotate_right();
 }

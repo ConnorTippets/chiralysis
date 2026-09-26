@@ -15,7 +15,7 @@ class Board {
         this.level = 1;
     }
 
-    draw() {
+    update() {
         colorMode(HSB);
         noFill();
         strokeWeight(2);
