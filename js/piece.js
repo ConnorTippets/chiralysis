@@ -32,6 +32,16 @@ const PIECES = [
     }
 ]
 
+// In the PIECES array, pieces are offset a bit per rotation. This corrects that.
+const PIECE_OFFSETS = [
+    [
+        [0, 1],
+        [2, 0],
+        [0, 2],
+        [1, 0]
+    ]
+]
+
 class Piece {
     constructor(type, x, y, rotation) {
         this.type = type;
@@ -42,6 +52,10 @@ class Piece {
 
     col() {
         return PIECES[this.type].col;
+    }
+
+    offset() {
+        return PIECE_OFFSETS[this.type][this.rotation];
     }
 
     cells() {

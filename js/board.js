@@ -5,6 +5,12 @@ class Board {
 
         this.locked_cells = Array.from({ length: BOARD_GRID_H }, () => Array(BOARD_GRID_W).fill({filled: false, col: null}));
         this.pieces = [new Piece(PIECE_TYPE.LINE, 3, 0, 0)];
+
+        for (var piece of this.pieces) {
+            const offset = piece.offset();
+            piece.x -= offset[0];
+            piece.y -= offset[1];
+        }
     }
 
     draw() {
