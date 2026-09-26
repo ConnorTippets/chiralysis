@@ -7,21 +7,37 @@ function setup() {
 function draw() {
     background(50);
 
-    if (keys.includes("ArrowLeft")) board.move_left();
-    if (keys.includes("ArrowRight")) board.move_right();
+    if (move_delay === -2 && move_timer >= 6) {
+        if (keyIsDown(LEFT_ARROW)) board.move_left();
+        if (keyIsDown(RIGHT_ARROW)) board.move_right();
+        move_timer = 0;
+    }
     board.update();
+
+    if (move_delay >= 0) move_delay ++;
+    if (move_timer >= 0) move_timer ++;
+
+    if (!(keyIsDown(LEFT_ARROW) || keyIsDown(RIGHT_ARROW))) {
+        move_delay = -1;
+    }
+    else if (move_delay >= 16) {
+        move_delay = -2;
+        move_timer = 0;
+    }
 }
 
 function keyPressed() {
+    // When the key is first pressed, the piece instantly moves.
+    // Then, after a delay, the piece continues moving.
+    if (key === "ArrowLeft") {
+        board.move_left();
+        move_delay = 0;
+    }
+    if (key === "ArrowRight") {
+        board.move_right();
+        move_delay = 0;
+    }
+
     if (key === "Z") return board.rotate_left();
     if (key === "ArrowUp") return board.rotate_right();
-
-    keys.push(key);
-}
-
-function keyReleased() {
-    const index = keys.indexOf(key);
-    if (index !== -1) {
-        keys.splice(index, 1);
-    }
 }

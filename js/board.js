@@ -42,7 +42,7 @@ class Board {
             this.drop_timer = -1;
             this.dropping_piece.y += 1;
         }
-        this.drop_timer += 1;
+        this.drop_timer ++;
     }
 
     rotate_left() {
@@ -60,7 +60,7 @@ class Board {
     }
 
     move_left() {
-        if (this.dropping_piece.x <= 0) return;
+        if (this.dropping_piece.x <= -4) return;
         this.dropping_piece.x -= 1;
     }
 

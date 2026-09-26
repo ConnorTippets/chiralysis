@@ -14,4 +14,10 @@ function gravity_timer(level) {
     return Math.floor(Math.pow(0.8 - (level - 1) * 0.007, level - 1) * 60);
 }
 
-var keys = [];
+// -1 means neither left/right is pressed
+// -2 means left/right is pressed and the delay completed
+// [0,16) means we're currently delaying
+// Is this stupid? yes
+var move_delay = -1;
+
+var move_timer = -1;
