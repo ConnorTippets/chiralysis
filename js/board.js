@@ -13,6 +13,8 @@ class Board {
 
         this.held = null;
         this.has_swapped = false;
+
+        this.lines = 0;
     }
 
     update() {
@@ -58,6 +60,13 @@ class Board {
                 rect(cell[0], cell[1], BOARD_TILE_W, BOARD_TILE_H);
             }
         }
+
+        textSize(64);
+        textAlign(CENTER, CENTER);
+        fill(0, 0, 100);
+        noStroke();
+        text(this.lines, 120, 670);
+        text(this.level, 120, 515);
     }
 
     // TODO: implement srs system
@@ -172,6 +181,9 @@ class Board {
             }
 
             if (line_is_complete) {
+                this.lines++;
+                if (this.lines % 10 == 0) this.level ++;
+
                 lines_cleared.push(line);
                 for (var i = this.locked_cells.length - 1; i >= 0; i --) {
                     if (this.locked_cells[i].y === line) {
