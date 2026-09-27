@@ -85,6 +85,16 @@ class Board {
         }
     }
 
+    hard_drop() {
+        if (this.check_collisions()) return;
+        if (this.dropping_piece.y >= BOARD_GRID_H) return;
+
+        while (!this.check_collisions()) this.dropping_piece.y ++;
+        this.dropping_piece.y --;
+        this.lock_piece();
+        this.spawn_new_piece();
+    }
+
     check_collisions() {
         for (var piece_cell of this.dropping_piece.cells()) {
             if (piece_cell[0] <= -1 || piece_cell[0] >= 10) return true;
