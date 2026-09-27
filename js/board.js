@@ -1,3 +1,8 @@
+STATE = {
+    PLAY: 0,
+    GAMEOVER: 1,
+}
+
 class Board {
     constructor() {
         this.locked_cells = [];
@@ -19,9 +24,13 @@ class Board {
         this.score = 0;
 
         this.last_was_tetris = false;
+
+        this.state = STATE.PLAY;
     }
 
     update() {
+        if (!this.state === STATE.PLAY) return;
+
         strokeWeight(2);
         for (var cell of this.locked_cells) {
             fill(cell.col[0], cell.col[1], cell.col[2]);
@@ -38,9 +47,13 @@ class Board {
             rect(cell[0] * BOARD_TILE_W + SIDEBAR_PIXELS + 1, cell[1] * BOARD_TILE_H + 1, BOARD_TILE_W - 2, BOARD_TILE_H - 2);
         }
 
-        noFill();
-        for (var cell of this.get_ghost_cells()) {
-            rect(cell[0] * BOARD_TILE_W + SIDEBAR_PIXELS + 1, cell[1] * BOARD_TILE_H + 1, BOARD_TILE_W - 2, BOARD_TILE_H - 2);
+        const ghost = this.get_ghost_cells();
+
+        if (ghost) {
+            noFill();
+            for (var cell of ghost) {
+                rect(cell[0] * BOARD_TILE_W + SIDEBAR_PIXELS + 1, cell[1] * BOARD_TILE_H + 1, BOARD_TILE_W - 2, BOARD_TILE_H - 2);
+            }
         }
 
         if (this.gravity_timer >= gravity_timer(this.level)) {
@@ -177,6 +190,10 @@ class Board {
         const offset = this.dropping_piece.offset();
         this.dropping_piece.x -= offset[0];
         this.dropping_piece.y -= offset[1];
+
+        if (this.check_collisions()) {
+            this.state = STATE.GAMEOVER;
+        }
     }
 
     clear_lines() {

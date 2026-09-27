@@ -31,6 +31,9 @@ function draw() {
     }
 
     board.update();
+    if (board.state === STATE.GAMEOVER) {
+        background(0, 100, 100);
+    }
 
     if (move_delay >= 0) move_delay ++;
     if (move_timer >= 0) move_timer ++;
