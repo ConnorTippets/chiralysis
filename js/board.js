@@ -16,11 +16,11 @@ class Board {
     }
 
     update() {
-        strokeWeight(3);
+        strokeWeight(2);
         for (var cell of this.locked_cells) {
             fill(cell.col[0], cell.col[1], cell.col[2]);
             stroke(cell.col[0], cell.col[1], cell.col[2] - 35);
-            rect(cell.x * BOARD_TILE_W + SIDEBAR_PIXELS, cell.y * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H);
+            rect(cell.x * BOARD_TILE_W + SIDEBAR_PIXELS + 1, cell.y * BOARD_TILE_H + 1, BOARD_TILE_W - 2, BOARD_TILE_H - 2);
         }
 
         const piece_col = this.dropping_piece.col();
@@ -29,12 +29,12 @@ class Board {
         fill(piece_col[0], piece_col[1], piece_col[2]);
         stroke(piece_col[0], piece_col[1], piece_col[2] - 15);
         for (var cell of piece_cells) {
-            rect(cell[0] * BOARD_TILE_W + SIDEBAR_PIXELS, cell[1] * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H);
+            rect(cell[0] * BOARD_TILE_W + SIDEBAR_PIXELS + 1, cell[1] * BOARD_TILE_H + 1, BOARD_TILE_W - 2, BOARD_TILE_H - 2);
         }
 
         noFill();
         for (var cell of this.get_ghost_cells()) {
-            rect(cell[0] * BOARD_TILE_W + SIDEBAR_PIXELS, cell[1] * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H);
+            rect(cell[0] * BOARD_TILE_W + SIDEBAR_PIXELS + 1, cell[1] * BOARD_TILE_H + 1, BOARD_TILE_W - 2, BOARD_TILE_H - 2);
         }
 
         if (this.gravity_timer >= gravity_timer(this.level)) {
