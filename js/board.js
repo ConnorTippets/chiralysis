@@ -60,18 +60,25 @@ class Board {
         }
     }
 
+    // TODO: implement srs system
     rotate_left() {
+        var old_rot = this.dropping_piece.rotation;
         this.dropping_piece.rotation --;
         if (this.dropping_piece.rotation < 0) {
             this.dropping_piece.rotation += 4;
         }
+
+        if (this.check_collisions()) this.dropping_piece.rotation = old_rot;
     }
 
     rotate_right() {
+        var old_rot = this.dropping_piece.rotation;
         this.dropping_piece.rotation ++;
         if (this.dropping_piece.rotation >= 4) {
             this.dropping_piece.rotation -= 4;
         }
+
+        if (this.check_collisions()) this.dropping_piece.rotation = old_rot;
     }
 
     move_left() {
