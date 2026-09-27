@@ -1,7 +1,5 @@
 class Board {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
+    constructor() {
 
         this.locked_cells = [];
         this.dropping_piece = new Piece(PIECE_TYPE.LINE, 3, 0, 0);
@@ -42,6 +40,8 @@ class Board {
             this.move_down();
         }
         this.gravity_timer ++;
+
+        image(nav_elements_img, 0, 0);
     }
 
     rotate_left() {

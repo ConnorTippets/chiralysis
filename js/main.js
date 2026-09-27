@@ -1,8 +1,10 @@
-function setup() {
+async function setup() {
     createCanvas(BOARD_SIZE_W + SIDEBAR_PIXELS * 2, BOARD_SIZE_H);
     colorMode(HSB);
 
-    board = new Board(0, 0);
+    nav_elements_img = await loadImage("../assets/nav_elements.png");
+
+    board = new Board();
 }
 
 function draw() {

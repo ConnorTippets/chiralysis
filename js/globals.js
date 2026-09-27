@@ -1,7 +1,7 @@
 const BOARD_SIZE_W = 400;
 const BOARD_SIZE_H = 800;
 
-const SIDEBAR_PIXELS = 200;
+const SIDEBAR_PIXELS = 250;
 
 const BOARD_GRID_W = 10;
 const BOARD_GRID_H = 20;
@@ -27,3 +27,5 @@ var move_delay = -1;
 var move_timer = -1;
 
 var drop_timer = -1;
+
+var nav_elements_img;
