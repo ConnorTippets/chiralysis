@@ -15,6 +15,10 @@ class Board {
         this.has_swapped = false;
 
         this.lines = 0;
+
+        this.score = 0;
+
+        this.last_was_tetris = false;
     }
 
     update() {
@@ -67,6 +71,7 @@ class Board {
         noStroke();
         text(this.lines, 120, 670);
         text(this.level, 120, 515);
+        text(this.score, 120, 365);
     }
 
     // TODO: implement srs system
@@ -110,7 +115,9 @@ class Board {
         }
     }
 
-    move_down() {
+    // TODO: determine if dropped piece counts as t-spin, add points accordingly
+
+    move_down(soft_drop) {
         if (this.check_collisions()) return;
         if (this.dropping_piece.y >= BOARD_GRID_H) return;
         this.dropping_piece.y ++;
@@ -121,6 +128,8 @@ class Board {
             this.lock_piece();
             this.clear_lines();
             this.spawn_new_piece();
+        } else if (soft_drop) {
+            this.score += this.level;
         }
     }
 
@@ -128,8 +137,11 @@ class Board {
         if (this.check_collisions()) return;
         if (this.dropping_piece.y >= BOARD_GRID_H) return;
 
+        var orig_y = this.dropping_piece.y;
+
         while (!this.check_collisions()) this.dropping_piece.y ++;
         this.dropping_piece.y --;
+        this.score += Math.abs(this.dropping_piece.y - orig_y) * this.level;
         this.has_swapped = false;
         this.lock_piece();
         this.clear_lines();
@@ -191,6 +203,17 @@ class Board {
                     }
                 }
             }
+        }
+
+        if (!lines_cleared.length) return;
+
+        if (lines_cleared.length === 1) { this.score += 100 * this.level; this.last_was_tetris = false; }
+        else if (lines_cleared.length === 2) { this.score += 300 * this.level; this.last_was_tetris = false; }
+        else if (lines_cleared.length === 3) { this.score += 500 * this.level; this.last_was_tetris = false; }
+        else {
+            if (this.last_was_tetris) this.score += 400 * this.level;
+            else this.score += 800 * this.level;
+            this.last_was_tetris = true;
         }
 
         lines_cleared.sort((a, b) => a - b);

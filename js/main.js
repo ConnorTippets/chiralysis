@@ -62,7 +62,7 @@ function keyPressed() {
     }
 
     if (key === "ArrowDown") {
-        board.move_down();
+        board.move_down(true);
         drop_timer = 0;
     }
 
