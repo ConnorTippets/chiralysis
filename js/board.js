@@ -54,13 +54,23 @@ class Board {
     }
 
     move_left() {
+        if (this.check_collisions()) return;
         if (this.dropping_piece.x <= -4) return;
         this.dropping_piece.x --;
+
+        if (this.check_collisions()) {
+            this.dropping_piece.x ++;
+        }
     }
 
     move_right() {
+        if (this.check_collisions()) return;
         if (this.dropping_piece.x >= BOARD_GRID_W) return;
         this.dropping_piece.x ++;
+
+        if (this.check_collisions()) {
+            this.dropping_piece.x --;
+        }
     }
 
     move_down() {
@@ -77,7 +87,8 @@ class Board {
 
     check_collisions() {
         for (var piece_cell of this.dropping_piece.cells()) {
-            if (piece_cell[1] >= 20) return true;
+            if (piece_cell[0] <= -1 || piece_cell[0] >= 10) return true;
+            if (piece_cell[0] <= -1 || piece_cell[1] >= 20) return true;
 
             for (var check_cell of this.locked_cells) {
                 if (check_cell.x === piece_cell[0] && check_cell.y === piece_cell[1]) {
