@@ -66,8 +66,10 @@ function keyPressed() {
         drop_timer = 0;
     }
 
-    if (key === " ") board.hard_drop();
-
     if (key === "Z") board.rotate_left();
     if (key === "ArrowUp") board.rotate_right();
+
+    if (key === " ") board.hard_drop();
+
+    if (key === "c") board.hold();
 }

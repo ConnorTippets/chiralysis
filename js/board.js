@@ -1,6 +1,5 @@
 class Board {
     constructor() {
-
         this.locked_cells = [];
         this.dropping_piece = new Piece(random_piece_type(), 3, 0, 0);
 
@@ -11,6 +10,9 @@ class Board {
         this.gravity_timer = 0;
 
         this.level = 1;
+
+        this.held = null;
+        this.has_swapped = false;
     }
 
     update() {
@@ -42,6 +44,20 @@ class Board {
         this.gravity_timer ++;
 
         image(nav_elements_img, 0, 0);
+
+        if (this.held) {
+            const held_col = this.held.col();
+            var held_cells = PIECES[this.held.type].cells[this.held.rotation];
+            const held_offset = this.held.offset();
+
+            held_cells = held_cells.map((c) => [(c[0] - held_offset[0]) * BOARD_TILE_W + 60, (c[1] - held_offset[1]) * BOARD_TILE_H + 130]);
+
+            fill(held_col[0], held_col[1], held_col[2]);
+            stroke(held_col[0], held_col[1], held_col[2] - 15);
+            for (var cell of held_cells) {
+                rect(cell[0], cell[1], BOARD_TILE_W, BOARD_TILE_H);
+            }
+        }
     }
 
     rotate_left() {
@@ -85,6 +101,7 @@ class Board {
 
         if (this.check_collisions()) {
             this.dropping_piece.y --;
+            this.has_swapped = false;
             this.lock_piece();
             this.clear_lines();
             this.spawn_new_piece();
@@ -97,6 +114,7 @@ class Board {
 
         while (!this.check_collisions()) this.dropping_piece.y ++;
         this.dropping_piece.y --;
+        this.has_swapped = false;
         this.lock_piece();
         this.clear_lines();
         this.spawn_new_piece();
@@ -177,5 +195,28 @@ class Board {
         var cells = this.dropping_piece.cells();
         this.dropping_piece.y = saved_y;
         return cells;
+    }
+
+    hold() {
+        if (this.has_swapped) return;
+        this.has_swapped = true;
+
+        var swapped_out = null;
+        if (this.held) swapped_out = cloneInstance(this.held);
+
+        this.held = cloneInstance(this.dropping_piece);
+        this.held.rotation = 0;
+
+        if (swapped_out) {
+            this.dropping_piece = swapped_out;
+            this.dropping_piece.x = 3;
+            this.dropping_piece.y = 0;
+            const offset = this.dropping_piece.offset();
+            this.dropping_piece.x -= offset[0];
+            this.dropping_piece.y -= offset[1];
+        } else {
+            this.spawn_new_piece();
+        }
+
     }
 }

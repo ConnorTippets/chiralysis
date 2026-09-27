@@ -33,3 +33,10 @@ var nav_elements_img;
 function random_piece_type() {
     return Math.floor(Math.random()*7);
 }
+
+function cloneInstance(instance) {
+    return Object.assign(
+        Object.create(Object.getPrototypeOf(instance)), 
+        instance
+    );
+}
