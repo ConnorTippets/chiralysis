@@ -29,3 +29,7 @@ var move_timer = -1;
 var drop_timer = -1;
 
 var nav_elements_img;
+
+function random_piece_type() {
+    return Math.floor(Math.random()*7);
+}

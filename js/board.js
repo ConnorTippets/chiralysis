@@ -2,7 +2,7 @@ class Board {
     constructor() {
 
         this.locked_cells = [];
-        this.dropping_piece = new Piece(PIECE_TYPE.LINE, 3, 0, 0);
+        this.dropping_piece = new Piece(random_piece_type(), 3, 0, 0);
 
         const offset = this.dropping_piece.offset();
         this.dropping_piece.x -= offset[0];
@@ -127,7 +127,7 @@ class Board {
         this.dropping_piece.x = 3;
         this.dropping_piece.y = 0;
         this.dropping_piece.rotation = 0;
-        this.dropping_piece.type = Math.floor(Math.random()*7);
+        this.dropping_piece.type = random_piece_type();
         const offset = this.dropping_piece.offset();
         this.dropping_piece.x -= offset[0];
         this.dropping_piece.y -= offset[1];
