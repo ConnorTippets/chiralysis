@@ -3,7 +3,7 @@ class Board {
         this.x = x;
         this.y = y;
 
-        this.locked_cells = Array.from({ length: BOARD_GRID_H }, () => Array(BOARD_GRID_W).fill({filled: false, col: null}));
+        this.locked_cells = [];
         this.dropping_piece = new Piece(PIECE_TYPE.LINE, 3, 0, 0);
 
         const offset = this.dropping_piece.offset();
@@ -16,29 +16,11 @@ class Board {
     }
 
     update() {
-        if (this.dropping_piece.y === 16) {
-            const col = this.dropping_piece.col();
-            for (var cell of this.dropping_piece.cells()) {
-                this.locked_cells[cell[1]][cell[0]] = {filled: true, col};
-            }
-
-            this.dropping_piece.x = 3;
-            this.dropping_piece.y = 0;
-            this.dropping_piece.rotation = 0;
-            const offset = this.dropping_piece.offset();
-            this.dropping_piece.x -= offset[0];
-            this.dropping_piece.y -= offset[1];
-        }
-
         strokeWeight(3);
-        for (var [y, row] of this.locked_cells.entries()) {
-            for (var [x, v] of row.entries()) {
-                if (v.filled) {
-                    fill(v.col[0], v.col[1], v.col[2]);
-                    stroke(v.col[0], v.col[1], v.col[2] - 35);
-                    rect(x * BOARD_TILE_W, y * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H);
-                }
-            }
+        for (var cell of this.locked_cells) {
+            fill(cell.col[0], cell.col[1], cell.col[2]);
+            stroke(cell.col[0], cell.col[1], cell.col[2] - 35);
+            rect(cell.x * BOARD_TILE_W, cell.y * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H);
         }
 
         const piece_col = this.dropping_piece.col();
@@ -82,7 +64,43 @@ class Board {
     }
 
     move_down() {
+        if (this.check_collisions()) return;
         if (this.dropping_piece.y >= BOARD_GRID_H) return;
         this.dropping_piece.y ++;
+
+        if (this.check_collisions()) {
+            this.dropping_piece.y --;
+            this.lock_piece();
+            this.spawn_new_piece();
+        }
+    }
+
+    check_collisions() {
+        for (var piece_cell of this.dropping_piece.cells()) {
+            if (piece_cell[1] >= 20) return true;
+
+            for (var check_cell of this.locked_cells) {
+                if (check_cell.x === piece_cell[0] && check_cell.y === piece_cell[1]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    lock_piece() {
+        const col = this.dropping_piece.col();
+        for (var cell of this.dropping_piece.cells()) {
+            this.locked_cells.push({x: cell[0], y: cell[1], col});
+        }
+    }
+
+    spawn_new_piece() {
+        this.dropping_piece.x = 3;
+        this.dropping_piece.y = 0;
+        this.dropping_piece.rotation = 0;
+        const offset = this.dropping_piece.offset();
+        this.dropping_piece.x -= offset[0];
+        this.dropping_piece.y -= offset[1];
     }
 }
