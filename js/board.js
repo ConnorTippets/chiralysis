@@ -16,19 +16,32 @@ class Board {
     }
 
     update() {
+        if (this.dropping_piece.y === 16) {
+            const col = this.dropping_piece.col();
+            for (var cell of this.dropping_piece.cells()) {
+                this.locked_cells[cell[1]][cell[0]] = {filled: true, col};
+            }
+
+            this.dropping_piece.x = 3;
+            this.dropping_piece.y = 0;
+            this.dropping_piece.rotation = 0;
+            const offset = this.dropping_piece.offset();
+            this.dropping_piece.x -= offset[0];
+            this.dropping_piece.y -= offset[1];
+        }
+
         colorMode(HSB);
-        noFill();
-        strokeWeight(2);
-        stroke(0, 0, 100);
+        strokeWeight(3);
         for (var [y, row] of this.locked_cells.entries()) {
             for (var [x, v] of row.entries()) {
                 if (v.filled) {
+                    fill(v.col[0], v.col[1], v.col[2]);
+                    stroke(v.col[0], v.col[1], v.col[2] - 35);
                     rect(x * BOARD_TILE_W, y * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H);
                 }
             }
         }
 
-        strokeWeight(3);
         const piece_col = this.dropping_piece.col();
         const piece_cells = this.dropping_piece.cells();
         
