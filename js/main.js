@@ -1,5 +1,5 @@
 function setup() {
-    createCanvas(BOARD_SIZE_W, BOARD_SIZE_H);
+    createCanvas(BOARD_SIZE_W + SIDEBAR_PIXELS * 2, BOARD_SIZE_H);
     colorMode(HSB);
 
     board = new Board(0, 0);
@@ -24,7 +24,7 @@ function draw() {
     stroke(0, 0, 14);
     for (var y = 0; y < BOARD_GRID_H; y ++) {
         for (var x = 0; x < BOARD_GRID_W; x ++) {
-            rect(x * BOARD_TILE_W, y * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H)
+            rect(x * BOARD_TILE_W + SIDEBAR_PIXELS, y * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H)
         }
     }
 
