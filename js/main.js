@@ -1,11 +1,12 @@
 function setup() {
     createCanvas(BOARD_SIZE_W, BOARD_SIZE_H);
+    colorMode(HSB);
 
     board = new Board(0, 0);
 }
 
 function draw() {
-    background(50);
+    background(0);
 
     if (move_delay === -2 && move_timer >= 6) {
         if (keyIsDown(LEFT_ARROW)) board.move_left();
@@ -19,6 +20,15 @@ function draw() {
     }
 
     board.update();
+
+    noFill();
+    strokeWeight(1);
+    stroke(0, 0, 14);
+    for (var y = 0; y < BOARD_GRID_H; y ++) {
+        for (var x = 0; x < BOARD_GRID_W; x ++) {
+            rect(x * BOARD_TILE_W, y * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H)
+        }
+    }
 
     if (move_delay >= 0) move_delay ++;
     if (move_timer >= 0) move_timer ++;

@@ -30,7 +30,6 @@ class Board {
             this.dropping_piece.y -= offset[1];
         }
 
-        colorMode(HSB);
         strokeWeight(3);
         for (var [y, row] of this.locked_cells.entries()) {
             for (var [x, v] of row.entries()) {
