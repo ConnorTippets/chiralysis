@@ -81,6 +81,7 @@ class Board {
         if (this.check_collisions()) {
             this.dropping_piece.y --;
             this.lock_piece();
+            this.clear_lines();
             this.spawn_new_piece();
         }
     }
@@ -92,6 +93,7 @@ class Board {
         while (!this.check_collisions()) this.dropping_piece.y ++;
         this.dropping_piece.y --;
         this.lock_piece();
+        this.clear_lines();
         this.spawn_new_piece();
     }
 
@@ -124,5 +126,38 @@ class Board {
         const offset = this.dropping_piece.offset();
         this.dropping_piece.x -= offset[0];
         this.dropping_piece.y -= offset[1];
+    }
+
+    clear_lines() {
+        var occupied = new Set(this.locked_cells.map(c => `${c.x},${c.y}`));
+        var lines_cleared = [];
+        
+        for (var line = 19; line >= 0; line --) {
+            var line_is_complete = true;
+            for (var x = 0; x < 10; x ++) {
+                if (!occupied.has(`${x},${line}`)) {
+                    line_is_complete = false;
+                    break;
+                }
+            }
+
+            if (line_is_complete) {
+                lines_cleared.push(line);
+                for (var i = this.locked_cells.length - 1; i >= 0; i --) {
+                    if (this.locked_cells[i].y === line) {
+                        this.locked_cells.splice(i, 1);
+                    }
+                }
+            }
+        }
+
+        lines_cleared.sort((a, b) => a - b);
+        this.locked_cells.sort((a, b) => a.y - b.y);
+
+        for (var line of lines_cleared) {
+            for (var cell of this.locked_cells) {
+                if (cell.y < line) cell.y ++;
+            }
+        }
     }
 }
