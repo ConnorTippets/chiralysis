@@ -10,7 +10,7 @@ class Board {
         this.dropping_piece.x -= offset[0];
         this.dropping_piece.y -= offset[1];
 
-        this.drop_timer = 0;
+        this.gravity_timer = 0;
 
         this.level = 1;
     }
@@ -38,22 +38,22 @@ class Board {
             rect(cell[0] * BOARD_TILE_W, cell[1] * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H);
         }
 
-        if (this.drop_timer >= gravity_timer(this.level)) {
-            this.drop_timer = -1;
-            this.dropping_piece.y += 1;
+        if (this.gravity_timer >= gravity_timer(this.level)) {
+            this.gravity_timer = -1;
+            this.dropping_piece.y ++;
         }
-        this.drop_timer ++;
+        this.gravity_timer ++;
     }
 
     rotate_left() {
-        this.dropping_piece.rotation -= 1;
+        this.dropping_piece.rotation --;
         if (this.dropping_piece.rotation < 0) {
             this.dropping_piece.rotation += 4;
         }
     }
 
     rotate_right() {
-        this.dropping_piece.rotation += 1;
+        this.dropping_piece.rotation ++;
         if (this.dropping_piece.rotation >= 4) {
             this.dropping_piece.rotation -= 4;
         }
@@ -61,11 +61,16 @@ class Board {
 
     move_left() {
         if (this.dropping_piece.x <= -4) return;
-        this.dropping_piece.x -= 1;
+        this.dropping_piece.x --;
     }
 
     move_right() {
         if (this.dropping_piece.x >= BOARD_GRID_W) return;
-        this.dropping_piece.x += 1;
+        this.dropping_piece.x ++;
+    }
+
+    move_down() {
+        if (this.dropping_piece.y >= BOARD_GRID_H) return;
+        this.dropping_piece.y ++;
     }
 }

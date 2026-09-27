@@ -21,3 +21,5 @@ function gravity_timer(level) {
 var move_delay = -1;
 
 var move_timer = -1;
+
+var drop_timer = -1;

@@ -12,10 +12,17 @@ function draw() {
         if (keyIsDown(RIGHT_ARROW)) board.move_right();
         move_timer = 0;
     }
+
+    if (keyIsDown(DOWN_ARROW) && drop_timer >= 3) {
+        board.move_down();
+        drop_timer = 0;
+    }
+
     board.update();
 
     if (move_delay >= 0) move_delay ++;
     if (move_timer >= 0) move_timer ++;
+    if (drop_timer >= 0) drop_timer ++;
 
     if (!(keyIsDown(LEFT_ARROW) || keyIsDown(RIGHT_ARROW))) {
         move_delay = -1;
@@ -23,6 +30,10 @@ function draw() {
     else if (move_delay >= 16) {
         move_delay = -2;
         move_timer = 0;
+    }
+
+    if (!keyIsDown(DOWN_ARROW)) {
+        drop_timer = -1;
     }
 }
 
@@ -36,6 +47,11 @@ function keyPressed() {
     if (key === "ArrowRight") {
         board.move_right();
         move_delay = 0;
+    }
+
+    if (key === "ArrowDown") {
+        board.move_down();
+        drop_timer = 0;
     }
 
     if (key === "Z") return board.rotate_left();
