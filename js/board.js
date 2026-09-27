@@ -52,7 +52,7 @@ class Board {
 
         if (this.gravity_timer >= gravity_timer(this.level)) {
             this.gravity_timer = -1;
-            this.dropping_piece.y ++;
+            this.move_down();
         }
         this.gravity_timer ++;
     }
