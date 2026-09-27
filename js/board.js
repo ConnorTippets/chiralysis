@@ -27,8 +27,13 @@ class Board {
         const piece_cells = this.dropping_piece.cells();
         
         fill(piece_col[0], piece_col[1], piece_col[2]);
-        stroke(piece_col[0], piece_col[1], piece_col[2] - 35);
+        stroke(piece_col[0], piece_col[1], piece_col[2] - 15);
         for (var cell of piece_cells) {
+            rect(cell[0] * BOARD_TILE_W, cell[1] * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H);
+        }
+
+        noFill();
+        for (var cell of this.get_ghost_cells()) {
             rect(cell[0] * BOARD_TILE_W, cell[1] * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H);
         }
 
@@ -159,5 +164,18 @@ class Board {
                 if (cell.y < line) cell.y ++;
             }
         }
+    }
+
+    get_ghost_cells() {
+        if (this.check_collisions()) return;
+        if (this.dropping_piece.y >= BOARD_GRID_H) return;
+
+        var saved_y = this.dropping_piece.y;
+        while (!this.check_collisions()) this.dropping_piece.y ++;
+        this.dropping_piece.y --;
+        
+        var cells = this.dropping_piece.cells();
+        this.dropping_piece.y = saved_y;
+        return cells;
     }
 }

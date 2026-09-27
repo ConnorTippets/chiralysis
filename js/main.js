@@ -19,8 +19,6 @@ function draw() {
         drop_timer = 0;
     }
 
-    board.update();
-
     noFill();
     strokeWeight(1);
     stroke(0, 0, 14);
@@ -29,6 +27,8 @@ function draw() {
             rect(x * BOARD_TILE_W, y * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H)
         }
     }
+
+    board.update();
 
     if (move_delay >= 0) move_delay ++;
     if (move_timer >= 0) move_timer ++;
