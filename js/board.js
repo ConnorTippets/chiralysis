@@ -5,31 +5,7 @@ STATE = {
 
 class Board {
     constructor() {
-        this.locked_cells = [];
-        this.dropping_piece = new Piece(random_piece_type(), 3, 0, 0);
-
-        const offset = this.dropping_piece.offset();
-        this.dropping_piece.x -= offset[0];
-        this.dropping_piece.y -= offset[1];
-
-        this.gravity_timer = 0;
-
-        this.level = 1;
-
-        this.held = null;
-        this.has_swapped = false;
-
-        this.lines = 0;
-
-        this.score = 0;
-
-        this.last_was_tetris = false;
-
-        this.state = STATE.PLAY;
-
-        this.should_flip = false;
-
-        this.direction = 1;
+        this.restart();
     }
 
     update() {
@@ -315,5 +291,33 @@ class Board {
             this.spawn_new_piece();
         }
 
+    }
+
+    restart() {
+        this.state = STATE.PLAY;
+        
+        this.locked_cells = [];
+        this.dropping_piece = new Piece(random_piece_type(), 3, 0, 0);
+
+        const offset = this.dropping_piece.offset();
+        this.dropping_piece.x -= offset[0];
+        this.dropping_piece.y -= offset[1];
+
+        this.gravity_timer = 0;
+
+        this.level = 1;
+
+        this.held = null;
+        this.has_swapped = false;
+
+        this.lines = 0;
+
+        this.score = 0;
+
+        this.last_was_tetris = false;
+
+        this.should_flip = false;
+
+        this.direction = 1;
     }
 }

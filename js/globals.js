@@ -40,3 +40,8 @@ function cloneInstance(instance) {
         instance
     );
 }
+
+const RESTART_BUTTON_L = 334;
+const RESTART_BUTTON_T = 480;
+const RESTART_BUTTON_W = 228;
+const RESTART_BUTTON_H = 70;
