@@ -1,6 +1,7 @@
 async function setup() {
     createCanvas(BOARD_SIZE_W + SIDEBAR_PIXELS * 2, BOARD_SIZE_H);
     colorMode(HSB);
+    textAlign(CENTER, CENTER);
 
     nav_elements_img = await loadImage("../assets/nav_elements.png");
 
@@ -32,7 +33,27 @@ function draw() {
 
     board.update();
     if (board.state === STATE.GAMEOVER) {
-        background(0, 100, 100);
+        fill(0, 0, 0);
+        stroke(0, 0, 100);
+        rect(237, 203, 423, 394);
+
+        fill(0, 0, 100);
+        textSize(56);
+        noStroke();
+        text("GAME OVER!", 450, 265);
+
+        textSize(48);
+        text("SCORE:", 450, 342);
+        text(board.score.toString(), 450, 420);
+
+        fill(100, 100, 28);
+        stroke(0, 0, 37);
+        rect(334, 500, 228, 70);
+        
+        fill(0, 0, 100);
+        noStroke();
+        textSize(32);
+        text("RESTART", 450, 535);
     }
 
     if (move_delay >= 0) move_delay ++;

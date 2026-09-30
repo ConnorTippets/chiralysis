@@ -33,8 +33,7 @@ class Board {
     }
 
     update() {
-        if (!this.state === STATE.PLAY) return;
-        if (this.should_flip === true) {
+        if (this.state === STATE.PLAY && this.should_flip === true) {
             this.should_flip = false;
 
             for (var cell of this.locked_cells) {
@@ -69,11 +68,13 @@ class Board {
             }
         }
 
-        if (this.gravity_timer >= gravity_timer(this.level)) {
-            this.gravity_timer = -1;
-            this.move_down();
+        if (this.state === STATE.PLAY) {
+            if (this.gravity_timer >= gravity_timer(this.level)) {
+                this.gravity_timer = -1;
+                this.move_down();
+            }
+            this.gravity_timer ++;
         }
-        this.gravity_timer ++;
 
         image(nav_elements_img, 0, 0);
 
@@ -92,7 +93,6 @@ class Board {
         }
 
         textSize(64);
-        textAlign(CENTER, CENTER);
         fill(0, 0, 100);
         noStroke();
         text(this.lines, 120, 670);
@@ -102,6 +102,7 @@ class Board {
 
     // TODO: implement srs system
     rotate_left() {
+        if (!this.state === STATE.PLAY) return;
         var old_rot = this.dropping_piece.rotation;
         this.dropping_piece.rotation --;
         if (this.dropping_piece.rotation < 0) {
@@ -112,6 +113,7 @@ class Board {
     }
 
     rotate_right() {
+        if (!this.state === STATE.PLAY) return;
         var old_rot = this.dropping_piece.rotation;
         this.dropping_piece.rotation ++;
         if (this.dropping_piece.rotation >= 4) {
@@ -122,6 +124,7 @@ class Board {
     }
 
     move_left() {
+        if (!this.state === STATE.PLAY) return;
         if (this.check_collisions()) return;
         if (this.dropping_piece.x <= -4) return;
         this.dropping_piece.x --;
@@ -132,6 +135,7 @@ class Board {
     }
 
     move_right() {
+        if (!this.state === STATE.PLAY) return;
         if (this.check_collisions()) return;
         if (this.dropping_piece.x >= BOARD_GRID_W) return;
         this.dropping_piece.x ++;
@@ -144,6 +148,7 @@ class Board {
     // TODO: determine if dropped piece counts as t-spin, add points accordingly
 
     move_down(soft_drop) {
+        if (!this.state === STATE.PLAY) return;
         if (this.check_collisions()) return;
         if (this.dropping_piece.y >= BOARD_GRID_H) return;
         this.dropping_piece.y += this.direction;
@@ -160,6 +165,7 @@ class Board {
     }
 
     hard_drop() {
+        if (!this.state === STATE.PLAY) return;
         if (this.check_collisions()) return;
         if (this.dropping_piece.y >= BOARD_GRID_H) return;
 
@@ -292,6 +298,7 @@ class Board {
     }
 
     hold() {
+        if (!this.state === STATE.PLAY) return;
         if (this.has_swapped) return;
         this.has_swapped = true;
 
