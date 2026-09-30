@@ -26,10 +26,23 @@ class Board {
         this.last_was_tetris = false;
 
         this.state = STATE.PLAY;
+
+        this.should_flip = false;
+
+        this.direction = 1;
     }
 
     update() {
         if (!this.state === STATE.PLAY) return;
+        if (this.should_flip === true) {
+            this.should_flip = false;
+
+            for (var cell of this.locked_cells) {
+                cell.y = 19 - cell.y;
+            }
+
+            this.direction *= -1;
+        }
 
         strokeWeight(2);
         for (var cell of this.locked_cells) {
@@ -133,10 +146,10 @@ class Board {
     move_down(soft_drop) {
         if (this.check_collisions()) return;
         if (this.dropping_piece.y >= BOARD_GRID_H) return;
-        this.dropping_piece.y ++;
+        this.dropping_piece.y += this.direction;
 
         if (this.check_collisions()) {
-            this.dropping_piece.y --;
+            this.dropping_piece.y -= this.direction;
             this.has_swapped = false;
             this.lock_piece();
             this.clear_lines();
@@ -152,8 +165,8 @@ class Board {
 
         var orig_y = this.dropping_piece.y;
 
-        while (!this.check_collisions()) this.dropping_piece.y ++;
-        this.dropping_piece.y --;
+        while (!this.check_collisions()) this.dropping_piece.y += this.direction;
+        this.dropping_piece.y -= this.direction;
         this.score += Math.abs(this.dropping_piece.y - orig_y) * this.level;
         this.has_swapped = false;
         this.lock_piece();
@@ -164,7 +177,7 @@ class Board {
     check_collisions() {
         for (var piece_cell of this.dropping_piece.cells()) {
             if (piece_cell[0] <= -1 || piece_cell[0] >= 10) return true;
-            if (piece_cell[0] <= -1 || piece_cell[1] >= 20) return true;
+            if (piece_cell[1] <= -1 || piece_cell[1] >= 20) return true;
 
             for (var check_cell of this.locked_cells) {
                 if (check_cell.x === piece_cell[0] && check_cell.y === piece_cell[1]) {
@@ -182,16 +195,28 @@ class Board {
         }
     }
 
-    spawn_new_piece() {
+    respawn_piece() {
         this.dropping_piece.x = 3;
-        this.dropping_piece.y = 0;
+
+        if (this.should_flip) {
+            if (this.direction === 1) this.dropping_piece.y = 17;
+            else this.dropping_piece.y = 0;
+        } else {
+            if (this.direction === 1) this.dropping_piece.y = 0;
+            else this.dropping_piece.y = 17;
+        }
+
         this.dropping_piece.rotation = 0;
-        this.dropping_piece.type = random_piece_type();
         const offset = this.dropping_piece.offset();
         this.dropping_piece.x -= offset[0];
         this.dropping_piece.y -= offset[1];
+    }
 
-        if (this.check_collisions()) {
+    spawn_new_piece() {
+        this.dropping_piece.type = random_piece_type();
+        this.respawn_piece();
+
+        if (!this.should_flip && this.check_collisions()) {
             this.state = STATE.GAMEOVER;
         }
     }
@@ -211,7 +236,8 @@ class Board {
 
             if (line_is_complete) {
                 this.lines++;
-                if (this.lines % 10 == 0) this.level ++;
+                if (this.lines % 10 === 0) this.level ++;
+                if (this.lines % 5 === 0) this.should_flip = true;
 
                 lines_cleared.push(line);
                 for (var i = this.locked_cells.length - 1; i >= 0; i --) {
@@ -233,12 +259,21 @@ class Board {
             this.last_was_tetris = true;
         }
 
-        lines_cleared.sort((a, b) => a - b);
-        this.locked_cells.sort((a, b) => a.y - b.y);
+        if (this.direction === 1) {
+            lines_cleared.sort((a, b) => a - b);
+            this.locked_cells.sort((a, b) => a.y - b.y);
+        } else {
+            lines_cleared.sort((a, b) => b - a);
+            this.locked_cells.sort((a, b) => b.y - a.y);
+        }
 
         for (var line of lines_cleared) {
             for (var cell of this.locked_cells) {
-                if (cell.y < line) cell.y ++;
+                if (this.direction == 1) {
+                    if (cell.y < line) cell.y ++;
+                } else {
+                    if (cell.y > line) cell.y --;
+                }
             }
         }
     }
@@ -248,8 +283,8 @@ class Board {
         if (this.dropping_piece.y >= BOARD_GRID_H) return;
 
         var saved_y = this.dropping_piece.y;
-        while (!this.check_collisions()) this.dropping_piece.y ++;
-        this.dropping_piece.y --;
+        while (!this.check_collisions()) this.dropping_piece.y += this.direction;
+        this.dropping_piece.y -= this.direction;;
         
         var cells = this.dropping_piece.cells();
         this.dropping_piece.y = saved_y;
@@ -268,11 +303,7 @@ class Board {
 
         if (swapped_out) {
             this.dropping_piece = swapped_out;
-            this.dropping_piece.x = 3;
-            this.dropping_piece.y = 0;
-            const offset = this.dropping_piece.offset();
-            this.dropping_piece.x -= offset[0];
-            this.dropping_piece.y -= offset[1];
+            this.respawn_piece();
         } else {
             this.spawn_new_piece();
         }
