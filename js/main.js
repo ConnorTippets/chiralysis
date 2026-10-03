@@ -24,7 +24,7 @@ function draw() {
     }
 
     if (keyIsDown(DOWN_ARROW) && drop_timer >= 3) {
-        board.move_down();
+        board.move_down(true);
         drop_timer = 0;
     }
 
