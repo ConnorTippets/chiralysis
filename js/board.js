@@ -68,6 +68,20 @@ class Board {
             }
         }
 
+        for (var [i, piece] of this.piece_sequence.entries()) {
+            const next_piece_col = piece.col();
+            var next_piece_cells = PIECES[piece.type].cells[piece.rotation];
+            const next_piece_offset = piece.offset();
+
+            next_piece_cells = next_piece_cells.map((c) => [(c[0] - next_piece_offset[0]) * BOARD_TILE_W + 60 + SIDEBAR_PIXELS + BOARD_SIZE_W, (c[1] - next_piece_offset[1]) * BOARD_TILE_H + 115 + i * 115])
+        
+            fill(next_piece_col[0], next_piece_col[1], next_piece_col[2]);
+            stroke(next_piece_col[0], next_piece_col[1], next_piece_col[2] - 15);
+            for (var cell of next_piece_cells) {
+                rect(cell[0], cell[1], BOARD_TILE_W, BOARD_TILE_H);
+            }
+        }
+
         textSize(64);
         fill(0, 0, 100);
         noStroke();
@@ -195,7 +209,8 @@ class Board {
     }
 
     spawn_new_piece() {
-        this.dropping_piece.type = random_piece_type();
+        this.dropping_piece = this.piece_sequence.splice(0, 1)[0];
+        this.piece_sequence.push(new Piece(random_piece_type(), 3, 0, 0));
         this.respawn_piece();
 
         if (!this.should_flip && this.check_collisions()) {
@@ -319,5 +334,10 @@ class Board {
         this.should_flip = false;
 
         this.direction = 1;
+
+        this.piece_sequence = [];
+        for (var i = 0; i < 6; i++) {
+            this.piece_sequence.push(new Piece(random_piece_type(), 3, 0, 0));
+        }
     }
 }
