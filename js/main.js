@@ -3,13 +3,13 @@ async function setup() {
     colorMode(HSB);
     textAlign(CENTER, CENTER);
 
-    nav_elements_img = await loadImage("../assets/nav_elements.png");
+    nav_elements_img = await loadImage("../assets/nav_elements.png", (img) => {return img;});
 
     board = new Board();
 }
 
 function draw() {
-    background(0);
+    background(0, 0, 100);
 
     if (move_delay === -2 && move_timer >= 3) {
         if (keyIsDown(LEFT_ARROW)) board.move_left();
@@ -24,7 +24,7 @@ function draw() {
 
     noFill();
     strokeWeight(1);
-    stroke(0, 0, 14);
+    stroke(0, 0, 90);
     for (var y = 0; y < BOARD_GRID_H; y ++) {
         for (var x = 0; x < BOARD_GRID_W; x ++) {
             rect(x * BOARD_TILE_W + SIDEBAR_PIXELS, y * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H)

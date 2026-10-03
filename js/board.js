@@ -19,29 +19,29 @@ class Board {
             this.direction *= -1;
         }
 
-        strokeWeight(2);
+        strokeWeight(3);
         for (var cell of this.locked_cells) {
             fill(cell.col[0], cell.col[1], cell.col[2]);
-            stroke(cell.col[0], cell.col[1], cell.col[2] - 35);
-            rect(cell.x * BOARD_TILE_W + SIDEBAR_PIXELS + 1, cell.y * BOARD_TILE_H + 1, BOARD_TILE_W - 2, BOARD_TILE_H - 2);
+            stroke(0, 0, 0);
+            rect(cell.x * BOARD_TILE_W + SIDEBAR_PIXELS, cell.y * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H);
         }
 
         const piece_col = this.dropping_piece.col();
         const piece_cells = this.dropping_piece.cells();
         
-        fill(piece_col[0], piece_col[1], piece_col[2]);
-        stroke(piece_col[0], piece_col[1], piece_col[2] - 15);
-        for (var cell of piece_cells) {
-            rect(cell[0] * BOARD_TILE_W + SIDEBAR_PIXELS + 1, cell[1] * BOARD_TILE_H + 1, BOARD_TILE_W - 2, BOARD_TILE_H - 2);
-        }
-
         const ghost = this.get_ghost_cells();
 
+        stroke(0, 0, 0);
         if (ghost) {
-            noFill();
+            fill(piece_col[0], 50, 100);
             for (var cell of ghost) {
-                rect(cell[0] * BOARD_TILE_W + SIDEBAR_PIXELS + 1, cell[1] * BOARD_TILE_H + 1, BOARD_TILE_W - 2, BOARD_TILE_H - 2);
+                rect(cell[0] * BOARD_TILE_W + SIDEBAR_PIXELS, cell[1] * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H);
             }
+        }
+
+        fill(piece_col[0], piece_col[1], piece_col[2]);
+        for (var cell of piece_cells) {
+            rect(cell[0] * BOARD_TILE_W + SIDEBAR_PIXELS, cell[1] * BOARD_TILE_H, BOARD_TILE_W, BOARD_TILE_H);
         }
 
         if (this.state === STATE.PLAY) {
@@ -62,7 +62,7 @@ class Board {
             held_cells = held_cells.map((c) => [(c[0] - held_offset[0]) * BOARD_TILE_W + 60, (c[1] - held_offset[1]) * BOARD_TILE_H + 130]);
 
             fill(held_col[0], held_col[1], held_col[2]);
-            stroke(held_col[0], held_col[1], held_col[2] - 15);
+            stroke(0, 0, 0);
             for (var cell of held_cells) {
                 rect(cell[0], cell[1], BOARD_TILE_W, BOARD_TILE_H);
             }
@@ -76,18 +76,19 @@ class Board {
             next_piece_cells = next_piece_cells.map((c) => [(c[0] - next_piece_offset[0]) * BOARD_TILE_W + 60 + SIDEBAR_PIXELS + BOARD_SIZE_W, (c[1] - next_piece_offset[1]) * BOARD_TILE_H + 115 + i * 115])
         
             fill(next_piece_col[0], next_piece_col[1], next_piece_col[2]);
-            stroke(next_piece_col[0], next_piece_col[1], next_piece_col[2] - 15);
+            stroke(0, 0, 0);
             for (var cell of next_piece_cells) {
                 rect(cell[0], cell[1], BOARD_TILE_W, BOARD_TILE_H);
             }
         }
 
         textSize(64);
-        fill(0, 0, 100);
+        textFont('Arial Black');
+        fill(0, 0, 0);
         noStroke();
-        text(this.lines, 120, 670);
-        text(this.level, 120, 515);
-        text(this.score, 120, 365);
+        text(this.lines, 125, 725);
+        text(this.level, 125, 575);
+        text(this.score, 125, 420);
     }
 
     // TODO: implement srs system
