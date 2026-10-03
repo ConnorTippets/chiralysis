@@ -1,9 +1,15 @@
+const deployed = false;
+
 async function setup() {
     createCanvas(BOARD_SIZE_W + SIDEBAR_PIXELS * 2, BOARD_SIZE_H);
     colorMode(HSB);
     textAlign(CENTER, CENTER);
 
-    nav_elements_img = await loadImage("../assets/nav_elements.png", (img) => {return img;});
+    if (deployed) {
+        nav_elements_img = await loadImage("assets/nav_elements.png", (img) => {return img;});
+    } else {
+        nav_elements_img = await loadImage("/assets/nav_elements.png", (img) => {return img;});
+    }
 
     board = new Board();
 }
